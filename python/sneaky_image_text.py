@@ -33,7 +33,9 @@ def build_new_pixel(rgb_list, wrong):
         to_update = wrong_copy[i]
         wrong_copy.remove(to_update)
         old_value = rgb_list[to_update]
-        ret_val[to_update] = old_value + 1 if old_value < 256 else old_value -1
+        if not old_value < 256:
+            print(old_value)
+        ret_val[to_update] = old_value + 1 if old_value < 255 else old_value -1
     return ret_val
 
 def get_bit_value(rgb):
