@@ -109,7 +109,7 @@ def handle_command(mode, key, file, text, im):
     if mode == 'write':
         write(im, base64.b64encode(bytes(text, 'utf-8')).decode('utf-8'))
         newFileName = file.split('.')
-        newFileName[0] = newFileName[0] + "_embeded"
+        newFileName[0] = newFileName[0] + "_embedded"
         im.save('.'.join(newFileName))
     elif mode == 'read':
         print(read(im))
