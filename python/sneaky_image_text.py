@@ -29,12 +29,13 @@ def build_new_pixel(rgb_list, wrong):
     needed_to_change = len(wrong)-1
     wrong_copy = wrong.copy()
     ret_val = rgb_list.copy()
-    for i in range(0, needed_to_change):
-        to_update = wrong_copy[i]
+
+    for _ in range(0, needed_to_change):
+        to_update = wrong_copy[0]
+
         wrong_copy.remove(to_update)
         old_value = rgb_list[to_update]
-        if not old_value < 256:
-            print(old_value)
+
         ret_val[to_update] = old_value + 1 if old_value < 255 else old_value -1
     return ret_val
 
@@ -55,6 +56,7 @@ def write(im, text):
         for i in range(0,8):
             bit = bitstring[i]
             pixel = get_next_pixel(used,max)
+
             used.append(pixel)
             x,y = get_pixel_position(pixel, im.size[0])
             rgb = pixels[x, y]
@@ -70,6 +72,7 @@ def write(im, text):
                     continue
                 else:
                     rgb_list = build_new_pixel(rgb_list, odd)
+            #print(pixel,  rgb_list, rgb, x, y)
             pixels[x,y] = tuple(rgb_list)
     # set next to 1 to mark end
     pixel = get_next_pixel(used, max)
@@ -96,21 +99,25 @@ def read(im):
             x,y = get_pixel_position(pixel, im.size[0])
             rgb = pixels[x, y]
             bit_value = get_bit_value(rgb)
+            #print("-",pixel, rgb, x, y)
             if (i == 0 and bit_value == '1'):
                 found_last = True
                 break
             bitstring = bitstring + bit_value
         if not found_last:
             text = text + chr(int(bitstring, 2))
+   # print(text, found_last)
     return base64.b64decode(text).decode('utf-8')
 
 def handle_command(mode, key, file, text, im):
     random.seed(key)
     if mode == 'write':
+       # print(base64.b64encode(bytes(text, 'utf-8')).decode('utf-8'))
         write(im, base64.b64encode(bytes(text, 'utf-8')).decode('utf-8'))
         newFileName = file.split('.')
         newFileName[0] = newFileName[0] + "_embedded"
-        im.save('.'.join(newFileName))
+
+        im.save(newFileName[0] + '.png', 'PNG')
     elif mode == 'read':
         print(read(im))
 
