@@ -18,7 +18,8 @@ def get_pixel_position(pixelNumber, x):
 def split_RGB_on_values(rgb):
     even = []
     odd = []
-    for idx,v in enumerate(rgb):
+    # ignore the alpha channel as i never touch it
+    for idx,v in enumerate(rgb[0:3]):
         if v % 2 == 0:
             even.append(idx)
         else:
